@@ -1,0 +1,23 @@
+sequenceDiagram
+  participant U as 用户
+  participant F as 前端
+  participant W as Worker
+  participant G as GitHub
+
+  U->>F: 编辑图表
+  F->>F: scheduleRender + scheduleAutoSave
+  F->>W: POST /api/save
+  W->>G: PUT contents/diagrams/id.mmd
+  G-->>W: ok
+  W-->>F: id shareUrl githubUrl
+
+  U->>F: 右键 Rename
+  F->>F: promptDiagramName
+  F->>W: POST /api/rename
+  W->>G: 读旧文件 写新文件 删旧文件
+  W-->>F: newId shareUrl
+
+  U->>F: 打开分享链接
+  F->>W: GET /view/user/id
+  W->>G: 公开读取
+  W-->>U: 只读 Mermaid 预览页
