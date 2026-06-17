@@ -1,2 +1,16 @@
-flowchart LR
-  A[New diagram] --> B[Edit me]
+sequenceDiagram
+  participant User
+  participant Editor as NoteEditor
+  participant API as Worker
+  participant GH as GitHub_Issues
+
+  User->>Editor: 每键输入
+  Editor->>Editor: 立刻更新 textarea（本地）
+  Note over Editor: 2s debounce 计时
+  User->>Editor: 继续打字则重置计时
+  Editor->>API: 停打 2s 后 PATCH
+  API->>GH: GET issue（合并 frontmatter）
+  API->>GH: PATCH issue
+  GH-->>API: updated issue
+  API-->>Editor: NoteDetail
+  Editor->>Editor: 更新 baseline + 状态栏「已保存」
