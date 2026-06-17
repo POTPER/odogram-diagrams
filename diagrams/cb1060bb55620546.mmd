@@ -1,2 +1,11 @@
-flowchart LR
-  A[New diagram] --> B[Edit me]
+```mermaid
+flowchart TB
+  clickExample[点击 Example / 首次进入]
+  clickExample --> loggedIn{已登录?}
+  loggedIn -->|否| staticLoad[加载静态 example.mmd]
+  loggedIn -->|是| tryLoad["GET /api/load?folder=示例&id=欢迎"]
+  tryLoad --> exists{存在?}
+  exists -->|是| openExisting[打开已有文件]
+  exists -->|否| seedSave["POST /api/save 写入示例内容"]
+  seedSave --> openNew[打开新文件]
+```
