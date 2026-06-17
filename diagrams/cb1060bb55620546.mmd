@@ -1,4 +1,4 @@
-```mermaid
+
 flowchart TB
   clickExample[点击 Example / 首次进入]
   clickExample --> loggedIn{已登录?}
@@ -8,4 +8,3 @@ flowchart TB
   exists -->|是| openExisting[打开已有文件]
   exists -->|否| seedSave["POST /api/save 写入示例内容"]
   seedSave --> openNew[打开新文件]
-``
