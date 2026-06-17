@@ -1,2 +1,37 @@
-flowchart LR
-  A[New diagram] --> B[Edit me]
+flowchart TB
+  subgraph browser [浏览器]
+    appJs[app.js 启动编排]
+    editor[editor.js CodeMirror 编辑]
+    preview[preview.js 实时预览]
+    diagrams[diagrams.js 图表 CRUD]
+    authUi[auth-ui.js 登录与帮助]
+    nameDialog[name-dialog.js 重命名弹窗]
+    layoutUi[layout-ui.js 分栏与侧边栏]
+    layoutMod[layout.js 布局 frontmatter]
+    themeMod[theme.js Mermaid 暗色主题]
+
+    appJs --> editor
+    appJs --> preview
+    appJs --> diagrams
+    appJs --> authUi
+    appJs --> layoutUi
+    diagrams --> nameDialog
+    diagrams --> authUi
+    preview --> themeMod
+    preview --> layoutMod
+  end
+
+  subgraph worker [Cloudflare Worker]
+    routes["/auth/* /api/* /view/*"]
+    sessions[KV Sessions]
+    assets[静态资源 public/]
+  end
+
+  subgraph github [用户 GitHub]
+    repo["odogram-diagrams/diagrams/*.mmd"]
+  end
+
+  browser -->|"fetch API"| worker
+  worker --> sessions
+  worker --> assets
+  worker -->|"GitHub API"| github
